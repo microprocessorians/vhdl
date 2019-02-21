@@ -20,7 +20,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_logic_unsigned.ALL;
-use IEEE.STD_LOGIC_arith.ALL;
+use IEEE.NUMERIC_STD.ALL;
 entity ins_mem is
 generic(data_width: integer:=32;
         add_bits: integer := 5);
