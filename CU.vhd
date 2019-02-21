@@ -9,7 +9,7 @@ port(
 	r_stack: out std_logic;--DONE
 	w_stack: out std_logic;--DONE
 	stack_data_sel: out std_logic;--DONE
-	s: out std_logic_vector(7 downto 1);
+	s: out std_logic_vector(8 downto 1);
 	w_r_n_data_mem: out std_logic;--DONE
 	w_rf: out std_logic--DONE
 );
@@ -26,15 +26,16 @@ begin
 	s(2) <= op_code(5); --Imm, RD2
 	
 	with op_code select
-		s(4 downto 3) <= "00" when "100001" | "010010", --Connect with stack_out
+		s(4 downto 3) <= "00" when "100001", --Connect with stack_out
 				 "01" when "101110", --Connect with input_buffer
 				 "10" when "100011", --Connect with data_mem_out
 				 "11" when others; --Default is to write in RF from ALU_out
 	s(5) <= op_code(5) and (not op_code(4)) and op_code(3) and op_code(2) and op_code(1); --OUT opcode
 	
-	s(7 downto 6) <= "11" when op_code = "001000" else
-			 "10" when test = '1' else
-			 "01" when op_code(5 downto 4) = "01" else
+	s(8 downto 6) <= "011" when op_code = "001000" else
+			 "010" when test = '1' else
+			 "001" when op_code = "010001" else --Select Stack
+			 "100" when op_code = "010000" else --Select Instruction call, JMP
 			 "00";
 	--Stack Memory control signals
 	r_stack <= ret or pop;
